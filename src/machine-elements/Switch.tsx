@@ -1,36 +1,31 @@
-import React, { Component } from 'react';
-import Motor from "./Motor";
+import React from 'react';
+
+interface SwitchProps {
+    onPositionChanged: any
+}
 
 interface SwitchState {
     position: SwitchPosition
 }
 
-class Switch extends Component<{}, SwitchState>  {
-    constructor(props: any) {
+class Switch extends React.Component<SwitchProps, SwitchState>  {
+    constructor(props: SwitchProps) {
         super(props);
 
         this.state = {
             position: SwitchPosition.Off
         };
     }
-    
-    getSwitchPosition(): SwitchPosition {
-        if (this.state) {
-            return this.state.position;
-        }
-
-        return SwitchPosition.Off;
-    }
 
     setSwitchPosition(newPosition: SwitchPosition) {
         this.setState({
             position: newPosition
         });
+
+        this.props.onPositionChanged(newPosition);
     }
 
     render() {
-        const isMotorOn: boolean = this.state.position == SwitchPosition.On ? true : false;
-
         return (
             <div>
                 <button onClick={() => this.setSwitchPosition(SwitchPosition.Paused)}>{SwitchPosition.Paused}</button>
@@ -39,16 +34,14 @@ class Switch extends Component<{}, SwitchState>  {
                     <button onClick={() => this.setSwitchPosition(SwitchPosition.Off)}>{SwitchPosition.Off}</button>
                 </div>
                 <div>
-                    Switch: {this.getSwitchPosition()}
+                    Switch: {this.state.position}
                 </div>
-
-                <Motor isOn={isMotorOn} />
             </div>
         );
     }
 }
 
-enum SwitchPosition {
+export enum SwitchPosition {
     Off = 'Off',
     On = 'On',
     Paused = 'Paused'

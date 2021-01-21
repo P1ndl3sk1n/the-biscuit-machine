@@ -1,11 +1,10 @@
-import { timingSafeEqual } from "crypto";
-import React, { Component } from 'react';
+import React from 'react';
 
 export interface MotorProps {
     isOn: boolean
 }
 
-class Motor extends Component<MotorProps, object>  {
+class Motor extends React.Component<MotorProps, object>  {
     private timerId: any;
 
     constructor(props: any) {
