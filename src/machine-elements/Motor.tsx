@@ -2,31 +2,31 @@ import { timingSafeEqual } from "crypto";
 import React, { Component } from 'react';
 
 export interface MotorProps {
-    isRunning: boolean
+    isOn: boolean
 }
 
 class Motor extends Component<MotorProps, object>  {
-    private timerID: any;
+    private timerId: any;
 
     constructor(props: any) {
         super(props);
     }
 
     componentDidUpdate(prevProps: MotorProps) {
-        if (prevProps.isRunning === this.props.isRunning) {
+        if (prevProps.isOn === this.props.isOn) {
             return;
         }
         
-        if (this.props.isRunning) {
+        if (this.props.isOn) {
             this.pulse();
-            this.timerID = setInterval(this.pulse, 5000);
+            this.timerId = setInterval(this.pulse, 5000);
         } else {
-            clearInterval(this.timerID);
+            clearInterval(this.timerId);
         }
     }
 
     componentWillUnmount() {
-        clearInterval(this.timerID);
+        clearInterval(this.timerId);
     }
 
     private pulse() {
@@ -36,7 +36,7 @@ class Motor extends Component<MotorProps, object>  {
     render() {
         return (
             <div>
-                Motor: {this.props.isRunning ? 'running' : 'not running'}
+                Motor: {this.props.isOn ? 'running' : 'not running'}
             </div>
         );
     }

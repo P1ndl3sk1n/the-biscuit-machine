@@ -29,7 +29,7 @@ class Switch extends Component<{}, SwitchState>  {
     }
 
     render() {
-        const motorShouldRun: boolean = this.state.position == SwitchPosition.On ? true : false;
+        const isMotorOn: boolean = this.state.position == SwitchPosition.On ? true : false;
 
         return (
             <div>
@@ -42,7 +42,7 @@ class Switch extends Component<{}, SwitchState>  {
                     Switch: {this.getSwitchPosition()}
                 </div>
 
-                <Motor isRunning={motorShouldRun} />
+                <Motor isOn={isMotorOn} />
             </div>
         );
     }
