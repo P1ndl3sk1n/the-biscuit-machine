@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import BiscuitMachine from "./BiscuitMachine";
 import './index.css';
-import Switch from "./machine-elements/Switch";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Switch />
+    <BiscuitMachine />
   </React.StrictMode>,
   document.getElementById('root')
 );
