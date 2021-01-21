@@ -30,13 +30,20 @@ class Motor extends Component<MotorProps, object>  {
     }
 
     private pulse() {
-        console.log(new Date().toLocaleString() + ': Motor pulse');
+        const output = document.getElementById('motor-output')
+        if (output) {
+            const div = document.createElement('div');
+            div.innerText = `Motor pulse: ${new Date().toLocaleString()}`;
+            output.appendChild(div);
+        }
     }
 
     render() {
         return (
             <div>
                 Motor: {this.props.isOn ? 'running' : 'not running'}
+                <div id="motor-output">
+                </div>
             </div>
         );
     }
