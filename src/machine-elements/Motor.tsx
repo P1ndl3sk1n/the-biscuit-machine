@@ -10,11 +10,6 @@ class Motor extends Component<MotorProps, object>  {
 
     constructor(props: any) {
         super(props);
-
-        this.state = {
-            isRunning: this.props.isRunning
-        };
-
     }
 
     componentDidUpdate(prevProps: MotorProps) {
