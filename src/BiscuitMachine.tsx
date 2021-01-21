@@ -3,7 +3,9 @@ import Motor from "./machine-elements/Motor";
 import Switch, { SwitchPosition } from "./machine-elements/Switch";
 
 interface BiscuitMachineState {
-    switchPosition: SwitchPosition
+    switchPosition: SwitchPosition, // TODO: consider whether to remove this
+    isMotorOn: boolean,
+    isHeatingElementOn: boolean
 }
 
 class BiscuitMachine extends React.Component<{}, BiscuitMachineState> {
@@ -11,24 +13,27 @@ class BiscuitMachine extends React.Component<{}, BiscuitMachineState> {
         super(props);
     
         this.state = {
-            switchPosition: SwitchPosition.Off
+            switchPosition: SwitchPosition.Off,
+            isMotorOn: false,
+            isHeatingElementOn: false
         };
     }
 
     positionChanged = (switchPosition: SwitchPosition) => {
+        const isMotorOn: boolean = switchPosition == SwitchPosition.On ? true : false;
+
         this.setState({
-            switchPosition: switchPosition
+            switchPosition,
+            isMotorOn
         });
     }
 
     render() {
-        const isMotorOn: boolean = this.state.switchPosition == SwitchPosition.On ? true : false;
-
         return (
             <div>
                 BISCUIT MACHINE
                 <Switch onPositionChanged={this.positionChanged}/>
-                <Motor isOn={isMotorOn} />
+                <Motor isOn={this.state.isMotorOn} />
             </div>
         )
     }
