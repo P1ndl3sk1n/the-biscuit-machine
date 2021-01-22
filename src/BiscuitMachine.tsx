@@ -63,10 +63,32 @@ class BiscuitMachine extends React.Component<{}, BiscuitMachineState> {
     render() {
         return (
             <div>
-                BISCUIT MACHINE
-                <Switch onPositionChanged={this.positionChanged}/>
-                <Motor isOn={this.state.isMotorOn} />
-                <Oven isHeatingElementOn={this.state.isHeatingElementOn} onGetTemperature={this.getTemperature} />
+                <table>
+                    <tr>
+                        <th colSpan={3}>
+                            BISCUIT MACHINE
+                        </th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <Oven isHeatingElementOn={this.state.isHeatingElementOn} onGetTemperature={this.getTemperature} />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <Motor isOn={this.state.isMotorOn} />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <Switch onPositionChanged={this.positionChanged}/>
+                        </td>
+                    </tr>
+                </table>
             </div>
         )
     }
