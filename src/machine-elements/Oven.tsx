@@ -1,7 +1,8 @@
 import React from 'react';
 
 interface OvenProps {
-    isHeatingElementOn: boolean
+    isHeatingElementOn: boolean,
+    onGetTemperature: any
 }
 
 interface OvenState {
@@ -19,8 +20,10 @@ class Oven extends React.Component<OvenProps, OvenState> {
         this.state = {
             temperature: 0
         };
+    }
 
-        this.timerId = setInterval(this.updateTemperature, 1000);
+    componentDidMount() {
+        this.timerId = setInterval(this.updateTemperature.bind(this), 1000);
     }
 
     componentWillUnmount() {
@@ -37,9 +40,15 @@ class Oven extends React.Component<OvenProps, OvenState> {
         let temperature = this.state.temperature;
         temperature += rate;
 
+        if (temperature < 0) {
+            temperature = 0;
+        }
+
         this.setState({
             temperature: temperature
         });
+
+        this.props.onGetTemperature(temperature);
     }
 
     render() {
@@ -50,3 +59,5 @@ class Oven extends React.Component<OvenProps, OvenState> {
         )
     }
 }
+
+export default Oven;

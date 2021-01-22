@@ -1,12 +1,16 @@
 import React from 'react';
 import Motor from "./machine-elements/Motor";
+import Oven from "./machine-elements/Oven";
 import Switch, { SwitchPosition } from "./machine-elements/Switch";
 
 interface BiscuitMachineState {
-    switchPosition: SwitchPosition, // TODO: consider whether to remove this
+    switchPosition: SwitchPosition,
     isMotorOn: boolean,
     isHeatingElementOn: boolean
 }
+
+const MinBakingTemperature: number = 220;
+const MaxBakingTemperature: number = 240;
 
 class BiscuitMachine extends React.Component<{}, BiscuitMachineState> {
     constructor(props: {}) {
@@ -20,10 +24,38 @@ class BiscuitMachine extends React.Component<{}, BiscuitMachineState> {
     }
 
     positionChanged = (switchPosition: SwitchPosition) => {
-        const isMotorOn: boolean = switchPosition == SwitchPosition.On ? true : false;
+        this.setState({
+            switchPosition
+        });
+    }
+
+    getTemperature = (temperature: number) => {
+        this.updateOven(temperature);
+        this.updateMotor(temperature);
+    }
+
+    private updateOven(temperature: number): void {
+        let isHeatingElementOn: boolean = this.state.isHeatingElementOn;
+
+        if (this.state.switchPosition !== SwitchPosition.Off) {
+            if (temperature < MinBakingTemperature) {
+                isHeatingElementOn = true
+            } else if (temperature >= MaxBakingTemperature) {
+                isHeatingElementOn = false;
+            }
+        } else {
+            isHeatingElementOn = false;
+        }
 
         this.setState({
-            switchPosition,
+            isHeatingElementOn
+        });
+    }
+
+    private updateMotor(temperature: number): void {
+        const isMotorOn: boolean = this.state.switchPosition == SwitchPosition.On && temperature >= MinBakingTemperature;
+
+        this.setState({
             isMotorOn
         });
     }
@@ -34,6 +66,7 @@ class BiscuitMachine extends React.Component<{}, BiscuitMachineState> {
                 BISCUIT MACHINE
                 <Switch onPositionChanged={this.positionChanged}/>
                 <Motor isOn={this.state.isMotorOn} />
+                <Oven isHeatingElementOn={this.state.isHeatingElementOn} onGetTemperature={this.getTemperature} />
             </div>
         )
     }
