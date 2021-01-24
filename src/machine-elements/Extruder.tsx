@@ -6,13 +6,14 @@ export type ExtruderProps = {
 };
 
 export default function Extruder(props: ExtruderProps) {
+    const {pulse, extruderPulsed} = props;
     React.useEffect(() => {
-        if (props.pulse) {
-            props.extruderPulsed();
+        if (pulse) {
+            extruderPulsed();
         }
-    }, [props.pulse]);
+    }, [pulse, extruderPulsed]);
 
     return (
-        <span>Extruder {props.pulse}</span>
+        <span>Extruder {pulse}</span>
     )
 }

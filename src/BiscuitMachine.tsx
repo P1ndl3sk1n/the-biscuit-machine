@@ -9,7 +9,8 @@ interface BiscuitMachineState {
     switchPosition: SwitchPosition,
     isMotorOn: boolean,
     isHeatingElementOn: boolean,
-    pulse: number
+    pulse: number,
+    bakedBiscuits: number
 }
 
 const MinBakingTemperature: number = 220;
@@ -23,7 +24,8 @@ export default class BiscuitMachine extends React.Component<{}, BiscuitMachineSt
             switchPosition: SwitchPosition.Off,
             isMotorOn: false,
             isHeatingElementOn: false,
-            pulse: 0
+            pulse: 0,
+            bakedBiscuits: 0
         };
     }
 
@@ -39,6 +41,10 @@ export default class BiscuitMachine extends React.Component<{}, BiscuitMachineSt
     }
 
     private onPulse = () => {
+        this.pulse();
+    }
+
+    private pulse = () => {
         this.setState({
             pulse: 1
         });

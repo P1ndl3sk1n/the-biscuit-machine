@@ -8,10 +8,6 @@ export interface MotorProps {
 class Motor extends React.Component<MotorProps, object>  {
     private timerId: any;
 
-    constructor(props: MotorProps) {
-        super(props);
-    }
-
     componentDidUpdate(prevProps: MotorProps) {
         if (prevProps.isOn === this.props.isOn) {
             return;
@@ -31,13 +27,6 @@ class Motor extends React.Component<MotorProps, object>  {
 
     private pulse = () => {
         this.props.pulse();
-
-        const output = document.getElementById('motor-output')
-        if (output) {
-            const div = document.createElement('div');
-            div.innerText = `Motor pulse: ${new Date().toLocaleString()}`;
-            output.appendChild(div);
-        }
     }
 
     render() {

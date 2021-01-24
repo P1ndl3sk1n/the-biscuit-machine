@@ -1,5 +1,10 @@
 import React from 'react';
 
+export enum SwitchPosition {
+    Off = 'Off',
+    On = 'On',
+    Paused = 'Paused'
+};
 interface SwitchProps {
     onPositionChanged: any
 }
@@ -41,11 +46,5 @@ class Switch extends React.Component<SwitchProps, SwitchState>  {
         );
     }
 }
-
-export enum SwitchPosition {
-    Off = 'Off',
-    On = 'On',
-    Paused = 'Paused'
-};
 
 export default Switch;

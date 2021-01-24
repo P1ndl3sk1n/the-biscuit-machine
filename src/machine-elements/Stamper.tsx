@@ -1,14 +1,15 @@
 import React from 'react';
 import { ExtruderProps } from "./Extruder";
 
-export default function Stamper(props: ExtruderProps) {    
+export default function Stamper(props: ExtruderProps) {
+    const { pulse, extruderPulsed } = props;  
     React.useEffect(() => {
-        if (props.pulse) {
-            props.extruderPulsed();
+        if (pulse) {
+            extruderPulsed();
         }
-    }, [props.pulse]);
+    }, [pulse, extruderPulsed]);
 
     return (
-        <span>Stamper {props.pulse}</span>
+        <span>Stamper {pulse}</span>
     )
 }
