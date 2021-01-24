@@ -29,8 +29,8 @@ class Motor extends React.Component<MotorProps, object>  {
         clearInterval(this.timerId);
     }
 
-    private pulse() {
-        this.props.pulse(1);
+    private pulse = () => {
+        this.props.pulse();
 
         const output = document.getElementById('motor-output')
         if (output) {

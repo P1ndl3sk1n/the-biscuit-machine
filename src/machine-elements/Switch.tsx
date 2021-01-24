@@ -17,7 +17,7 @@ class Switch extends React.Component<SwitchProps, SwitchState>  {
         };
     }
 
-    setSwitchPosition(newPosition: SwitchPosition) {
+    private setSwitchPosition = (newPosition: SwitchPosition): void => {
         this.setState({
             position: newPosition
         });

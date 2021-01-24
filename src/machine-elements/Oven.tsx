@@ -11,7 +11,7 @@ interface OvenState {
 
 class Oven extends React.Component<OvenProps, OvenState> {
     private timerId: any;
-    private heatRate: number = 2;
+    private heatRate: number = 10;
     private coolRate: number = -1;
 
     constructor(props: OvenProps) {
@@ -30,11 +30,7 @@ class Oven extends React.Component<OvenProps, OvenState> {
         clearInterval(this.timerId);
     }
 
-    getTemperature(): number {
-        return this.state.temperature;
-    }
-    
-    private updateTemperature(): void {
+    private updateTemperature = (): void => {
         const rate: number = this.props.isHeatingElementOn ? this.heatRate : this.coolRate;
 
         let temperature = this.state.temperature;

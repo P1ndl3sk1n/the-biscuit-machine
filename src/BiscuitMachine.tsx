@@ -15,7 +15,7 @@ interface BiscuitMachineState {
 const MinBakingTemperature: number = 220;
 const MaxBakingTemperature: number = 240;
 
-class BiscuitMachine extends React.Component<{}, BiscuitMachineState> {
+export default class BiscuitMachine extends React.Component<{}, BiscuitMachineState> {
     constructor(props: {}) {
         super(props);
     
@@ -27,24 +27,35 @@ class BiscuitMachine extends React.Component<{}, BiscuitMachineState> {
         };
     }
 
-    positionChanged = (switchPosition: SwitchPosition) => {
+    private positionChanged = (switchPosition: SwitchPosition) => {
         this.setState({
             switchPosition
         });
     }
 
-    getTemperature = (temperature: number) => {
+    private getTemperature = (temperature: number) => {
         this.updateOven(temperature);
         this.updateMotor(temperature);
     }
 
-    onPulse = (pulse: number) => {
+    private onPulse = () => {
         this.setState({
-            pulse
+            pulse: 1
         });
+        setTimeout(() => {
+            this.setState({
+                pulse: 0
+            });
+        }, 1000);
     }
 
-    private updateOven(temperature: number): void {
+    private onExtruderPulsed = () => {
+    }
+
+    private onStamperPulsed = () => {
+    }
+
+    private updateOven = (temperature: number): void => {
         let isHeatingElementOn: boolean = this.state.isHeatingElementOn;
 
         if (this.state.switchPosition !== SwitchPosition.Off) {
@@ -62,7 +73,7 @@ class BiscuitMachine extends React.Component<{}, BiscuitMachineState> {
         });
     }
 
-    private updateMotor(temperature: number): void {
+    private updateMotor = (temperature: number): void => {
         const isMotorOn: boolean = this.state.switchPosition === SwitchPosition.On && temperature >= MinBakingTemperature;
 
         this.setState({
@@ -84,10 +95,11 @@ class BiscuitMachine extends React.Component<{}, BiscuitMachineState> {
                     <tbody>
                         <tr>
                             <td>
-                                <Extruder pulse={this.state.pulse} />
+                                <Extruder pulse={this.state.pulse} extruderPulsed={this.onExtruderPulsed} />
                             </td>
                             <td>
-                                <Stamper pulse={this.state.pulse} /></td>
+                                <Stamper pulse={this.state.pulse} extruderPulsed={this.onStamperPulsed} />
+                            </td>
                             <td>
                                 <Oven isHeatingElementOn={this.state.isHeatingElementOn} onGetTemperature={this.getTemperature} />
                             </td>
@@ -117,5 +129,3 @@ class BiscuitMachine extends React.Component<{}, BiscuitMachineState> {
         )
     }
 }
-
-export default BiscuitMachine;
