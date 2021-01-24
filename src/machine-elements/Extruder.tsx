@@ -1,13 +1,16 @@
 import React from 'react';
 
 export type ExtruderProps = {
-    pulse: boolean
+    pulse: number
 };
 
-function Extruder(props: ExtruderProps) {
+export default function Extruder(props: ExtruderProps) {
+    React.useEffect(() => {
+        if (props.pulse) {
+        }
+    }, [props.pulse]);
+
     return (
         <span>Extruder</span>
     )
 }
-
-export default Extruder;

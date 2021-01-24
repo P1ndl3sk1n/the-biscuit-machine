@@ -1,12 +1,15 @@
 import React from 'react';
+import Extruder from "./machine-elements/Extruder";
 import Motor from "./machine-elements/Motor";
 import Oven from "./machine-elements/Oven";
+import Stamper from "./machine-elements/Stamper";
 import Switch, { SwitchPosition } from "./machine-elements/Switch";
 
 interface BiscuitMachineState {
     switchPosition: SwitchPosition,
     isMotorOn: boolean,
-    isHeatingElementOn: boolean
+    isHeatingElementOn: boolean,
+    pulse: number
 }
 
 const MinBakingTemperature: number = 220;
@@ -19,7 +22,8 @@ class BiscuitMachine extends React.Component<{}, BiscuitMachineState> {
         this.state = {
             switchPosition: SwitchPosition.Off,
             isMotorOn: false,
-            isHeatingElementOn: false
+            isHeatingElementOn: false,
+            pulse: 0
         };
     }
 
@@ -32,6 +36,12 @@ class BiscuitMachine extends React.Component<{}, BiscuitMachineState> {
     getTemperature = (temperature: number) => {
         this.updateOven(temperature);
         this.updateMotor(temperature);
+    }
+
+    onPulse = (pulse: number) => {
+        this.setState({
+            pulse
+        });
     }
 
     private updateOven(temperature: number): void {
@@ -53,7 +63,7 @@ class BiscuitMachine extends React.Component<{}, BiscuitMachineState> {
     }
 
     private updateMotor(temperature: number): void {
-        const isMotorOn: boolean = this.state.switchPosition == SwitchPosition.On && temperature >= MinBakingTemperature;
+        const isMotorOn: boolean = this.state.switchPosition === SwitchPosition.On && temperature >= MinBakingTemperature;
 
         this.setState({
             isMotorOn
@@ -64,30 +74,44 @@ class BiscuitMachine extends React.Component<{}, BiscuitMachineState> {
         return (
             <div>
                 <table>
-                    <tr>
-                        <th colSpan={3}>
-                            BISCUIT MACHINE
-                        </th>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <Oven isHeatingElementOn={this.state.isHeatingElementOn} onGetTemperature={this.getTemperature} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <Motor isOn={this.state.isMotorOn} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <Switch onPositionChanged={this.positionChanged}/>
-                        </td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th colSpan={3}>
+                                BISCUIT MACHINE
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <Extruder pulse={this.state.pulse} />
+                            </td>
+                            <td>
+                                <Stamper pulse={this.state.pulse} /></td>
+                            <td>
+                                <Oven isHeatingElementOn={this.state.isHeatingElementOn} onGetTemperature={this.getTemperature} />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Motor isOn={this.state.isMotorOn} pulse={this.onPulse} />
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <Switch onPositionChanged={this.positionChanged}/>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         )

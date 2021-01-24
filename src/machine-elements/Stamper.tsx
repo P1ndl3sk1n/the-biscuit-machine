@@ -1,10 +1,13 @@
 import React from 'react';
-import { ExtruderProps } from "./extruder";
+import { ExtruderProps } from "./Extruder";
 
-function Extruder(props: ExtruderProps) {
+export default function Stamper(props: ExtruderProps) {    
+    React.useEffect(() => {
+        if (props.pulse) {
+        }
+    }, [props.pulse]);
+
     return (
         <span>Stamper</span>
     )
 }
-
-export default Extruder;

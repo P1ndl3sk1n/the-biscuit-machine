@@ -1,13 +1,14 @@
 import React from 'react';
 
 export interface MotorProps {
-    isOn: boolean
+    isOn: boolean,
+    pulse: any
 }
 
 class Motor extends React.Component<MotorProps, object>  {
     private timerId: any;
 
-    constructor(props: any) {
+    constructor(props: MotorProps) {
         super(props);
     }
 
@@ -18,7 +19,7 @@ class Motor extends React.Component<MotorProps, object>  {
         
         if (this.props.isOn) {
             this.pulse();
-            this.timerId = setInterval(this.pulse, 5000);
+            this.timerId = setInterval(this.pulse.bind(this), 5000);
         } else {
             clearInterval(this.timerId);
         }
@@ -29,6 +30,8 @@ class Motor extends React.Component<MotorProps, object>  {
     }
 
     private pulse() {
+        this.props.pulse(1);
+
         const output = document.getElementById('motor-output')
         if (output) {
             const div = document.createElement('div');
