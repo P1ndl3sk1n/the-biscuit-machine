@@ -11,3 +11,28 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+td {
+  text-align: center;
+}
+
+.oven {
+  border-bottom: solid;
+}
+
+.oven.cold {
+  border-bottom-color: lightblue;
+}
+
+.oven.warm {
+  border-bottom-color: lightsalmon;
+}
+
+.oven.hot {
+  border-bottom-color: brown;
+}
+
+.conveyor-cell {
+  width: 80px;
+  border-style: groove;
+}

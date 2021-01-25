@@ -185,7 +185,7 @@ export default class BiscuitMachine extends React.Component<{}, BiscuitMachineSt
                 <table>
                     <thead>
                         <tr>
-                            <th colSpan={3}>
+                            <th colSpan={7}>
                                 BISCUIT MACHINE
                             </th>
                         </tr>
@@ -209,11 +209,10 @@ export default class BiscuitMachine extends React.Component<{}, BiscuitMachineSt
                             {this.state.conveyor.map((biscuitState, i) => {
                                 const state: any = biscuitState === BiscuitState.None ? '' : BiscuitState[biscuitState];
                                 return (
-                                    <td>
-                                        <div style={{display: "inline-block", width: "70px", borderStyle: "groove", height: "26px"}}> 
-                                            {state}
-                                        </div>
-                                    </td>)
+                                    <td key={i} className="conveyor-cell">
+                                        {state}
+                                    </td>
+                                )
                             })}
                             <td>Baked: {this.state.bakedBiscuits}</td>
                         </tr>

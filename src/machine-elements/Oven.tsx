@@ -6,7 +6,8 @@ interface OvenProps {
 }
 
 interface OvenState {
-    temperature: number
+    temperature: number,
+    ovenClass: string;
 }
 
 class Oven extends React.Component<OvenProps, OvenState> {
@@ -18,7 +19,8 @@ class Oven extends React.Component<OvenProps, OvenState> {
         super(props);
 
         this.state = {
-            temperature: 0
+            temperature: 0,
+            ovenClass: "oven cold"
         };
     }
 
@@ -41,16 +43,31 @@ class Oven extends React.Component<OvenProps, OvenState> {
         }
 
         this.setState({
-            temperature: temperature
+            temperature: temperature,
+            ovenClass: this.getOvenClass(temperature)
         });
 
         this.props.onGetTemperature(temperature);
     }
 
+    private getOvenClass = (temp: number) => {
+        let ovenClass = "oven";
+
+        if (temp < 50) {
+            ovenClass += " cold";
+        } else if (temp < 150) {
+            ovenClass += " warm";
+        } else {
+            ovenClass += " hot";
+        }
+
+        return ovenClass;
+    }
+
     render() {
         return (
-            <div>
-                Oven: {this.state.temperature}
+            <div className={this.state.ovenClass}>
+                Oven: {this.state.temperature } &deg;
             </div>
         )
     }
