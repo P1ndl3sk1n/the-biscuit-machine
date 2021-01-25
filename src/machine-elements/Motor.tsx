@@ -32,9 +32,7 @@ class Motor extends React.Component<MotorProps, object>  {
     render() {
         return (
             <div>
-                Motor: {this.props.isOn ? 'running' : 'not running'}
-                <div id="motor-output">
-                </div>
+                Motor: {this.props.isOn ? 'On' : 'Off'}
             </div>
         );
     }
