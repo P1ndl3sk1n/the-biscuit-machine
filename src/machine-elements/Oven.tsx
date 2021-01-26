@@ -2,7 +2,7 @@ import React from 'react';
 
 interface OvenProps {
     isHeatingElementOn: boolean,
-    onGetTemperature: any
+    onGetTemperature: (temperature: number) => void
 }
 
 interface OvenState {

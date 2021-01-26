@@ -2,7 +2,7 @@ import React from 'react';
 
 export type ExtruderProps = {
     pulse: number,
-    extruderPulsed: any
+    extruderPulsed: () => void
 };
 
 export default function Extruder(props: ExtruderProps) {

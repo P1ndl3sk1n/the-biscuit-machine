@@ -2,11 +2,15 @@ import React from 'react';
 
 export interface MotorProps {
     isOn: boolean,
-    pulse: any
+    pulse: () => void
 }
 
 class Motor extends React.Component<MotorProps, object>  {
     private timerId: any;
+
+    constructor(props: MotorProps) {
+        super(props);
+    }
 
     componentDidUpdate(prevProps: MotorProps) {
         if (prevProps.isOn === this.props.isOn) {

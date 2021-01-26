@@ -29,8 +29,8 @@ const BakingAreaStartIndex: number = 3;
 const BakingAreaEndIndex: number = 4;
 
 
-export default class BiscuitMachine extends React.Component<{}, BiscuitMachineState> {
-    constructor(props: {}) {
+export default class BiscuitMachine extends React.Component<object, BiscuitMachineState> {
+    constructor(props: object) {
         super(props);
     
         let conveyor: BiscuitState[] = [];
@@ -207,7 +207,7 @@ export default class BiscuitMachine extends React.Component<{}, BiscuitMachineSt
                         </tr>
                         <tr>
                             {this.state.conveyor.map((biscuitState, i) => {
-                                const state: any = biscuitState === BiscuitState.None ? '' : BiscuitState[biscuitState];
+                                const state: string = biscuitState === BiscuitState.None ? '' : BiscuitState[biscuitState];
                                 return (
                                     <td key={i} className="conveyor-cell">
                                         {state}

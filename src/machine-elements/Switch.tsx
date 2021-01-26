@@ -6,7 +6,7 @@ export enum SwitchPosition {
     Paused = 'Paused'
 };
 interface SwitchProps {
-    onPositionChanged: any
+    onPositionChanged: (newPosition: SwitchPosition) => void
 }
 
 interface SwitchState {
