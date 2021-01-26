@@ -7,10 +7,11 @@ import Switch, { SwitchPosition } from "./machine-elements/Switch";
 
 enum BiscuitState {
     None = 0,
-    New = 1,
+    Extruded = 1,
     Stamped = 2,
     Baking = 3,
-    Baked = 4
+    Baked = 4,
+    BurnOut = 5
 }
 
 interface BiscuitMachineState {
@@ -19,7 +20,9 @@ interface BiscuitMachineState {
     isHeatingElementOn: boolean,
     pulse: number,
     bakedBiscuits: number,
-    conveyor: BiscuitState[] 
+    conveyor: BiscuitState[],
+    displayBurningBiscuitsMessage: boolean,
+    displayBurnOutBiscuitsMessage: boolean
 }
 
 const MinBakingTemperature: number = 220;
@@ -27,8 +30,12 @@ const MaxBakingTemperature: number = 240;
 const ConveyorLength: number = 6;
 const BakingAreaStartIndex: number = 3;
 const BakingAreaEndIndex: number = 4;
+export const MotorPulseInterval: number = 5; 
 
 export default class BiscuitMachine extends React.Component<object, BiscuitMachineState> {
+    private warningTimeout: any;
+    private burnOutTimeout: any;
+
     constructor(props: object) {
         super(props);
     
@@ -43,14 +50,23 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
             isHeatingElementOn: false,
             pulse: 0,
             bakedBiscuits: 0,
-            conveyor: conveyor
+            conveyor: conveyor,
+            displayBurningBiscuitsMessage: false,
+            displayBurnOutBiscuitsMessage: false
         };
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.warningTimeout);
+        clearInterval(this.burnOutTimeout);
     }
 
     private positionChanged = (switchPosition: SwitchPosition) => {
         this.setState({
             switchPosition
         });
+
+        this.updateMessages(switchPosition);
     }
 
     private getTemperature = (temperature: number) => {
@@ -84,7 +100,7 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
         let conveyor = this.state.conveyor;
 
         if (conveyor[0] === BiscuitState.None) {
-            conveyor[0] = BiscuitState.New;
+            conveyor[0] = BiscuitState.Extruded;
         }
 
         this.setState({
@@ -99,7 +115,7 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
 
         let conveyor = this.state.conveyor;
 
-        if (conveyor[1] === BiscuitState.New) {
+        if (conveyor[1] === BiscuitState.Extruded) {
             conveyor[1] = BiscuitState.Stamped;
         }
 
@@ -157,7 +173,6 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
         let { bakedBiscuits, conveyor } = this.state;
 
         if (conveyor[conveyor.length - 1] === BiscuitState.Baked) {
-            conveyor[conveyor.length - 1] = BiscuitState.None;
             bakedBiscuits++;
         }
 
@@ -165,12 +180,12 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
             conveyor[BakingAreaEndIndex] = BiscuitState.Baked;
         }
 
-        if (conveyor[BakingAreaStartIndex] === BiscuitState.Stamped) {
-            conveyor[BakingAreaStartIndex] = BiscuitState.Baking;
-        }
-
         for (let i = conveyor.length - 1; i > 0; i--) {
             conveyor[i] = conveyor[i - 1];
+        }
+
+        if (conveyor[BakingAreaStartIndex] === BiscuitState.Stamped) {
+            conveyor[BakingAreaStartIndex] = BiscuitState.Baking;
         }
 
         conveyor[0] = BiscuitState.None;
@@ -178,6 +193,66 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
         this.setState({
             bakedBiscuits: bakedBiscuits,
             conveyor: conveyor
+        });
+    }
+
+    private hasBakingBiscuits = () => {
+        for (let i = BakingAreaStartIndex; i <= BakingAreaEndIndex; i++) {
+            if (this.state.conveyor[i] === BiscuitState.Baking) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private updateMessages = (switchPosition: SwitchPosition) => {
+        let displayBurningBiscuitsMessage: boolean = false;
+        let displayBurnOutBiscuitsMessage: boolean = false;
+
+        if (switchPosition === SwitchPosition[SwitchPosition.Paused] && this.hasBakingBiscuits()) {
+            setTimeout(() => {
+                if (this.state.switchPosition === SwitchPosition.Paused) {
+                    displayBurningBiscuitsMessage = true;
+                    this.setState({
+                        displayBurningBiscuitsMessage,
+                        displayBurnOutBiscuitsMessage
+                    });
+                }
+
+                clearTimeout(this.warningTimeout);
+            }, 2 * MotorPulseInterval * 1000);
+
+            setTimeout(() => {
+                if (this.state.switchPosition === SwitchPosition.Paused) {
+                    for (let i = BakingAreaStartIndex; i <= BakingAreaEndIndex; i++) {
+                        let { conveyor } = this.state;
+                        if (conveyor[i] === BiscuitState.Baking) {
+                            conveyor[i] = BiscuitState.BurnOut;
+                            displayBurnOutBiscuitsMessage = true;
+                        }
+
+                        this.setState({
+                            conveyor
+                        });
+                    }
+                    displayBurningBiscuitsMessage = false;
+                    this.setState({
+                        displayBurningBiscuitsMessage,
+                        displayBurnOutBiscuitsMessage
+                    });
+                }
+                
+                clearTimeout(this.burnOutTimeout);
+            }, 3 * MotorPulseInterval * 1000);
+        } else {
+            clearTimeout(this.warningTimeout);
+            clearTimeout(this.burnOutTimeout);
+        }
+
+        this.setState({
+            displayBurningBiscuitsMessage,
+            displayBurnOutBiscuitsMessage
         });
     }
 
@@ -222,10 +297,20 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
                             <td>
                                 <Motor isOn={this.state.isMotorOn} onPulse={this.pulse} />
                             </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td colSpan={4} className="warning">
+                                {this.state.displayBurningBiscuitsMessage &&
+                                <div className="warning-msg">
+                                    <i className="fa fa-warning"></i>
+                                    Biscuits in the oven are going to burn out!
+                                </div>
+                                }
+                                {this.state.displayBurnOutBiscuitsMessage &&
+                                <div className="error-msg">
+                                    <i className="fa fa-times-circle"></i>
+                                    The biscuits in the oven burnt out!
+                                </div>
+                                }
+                            </td>
                             <td>
                                 <Switch onPositionChanged={this.positionChanged}/>
                             </td>

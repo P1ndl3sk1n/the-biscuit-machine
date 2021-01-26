@@ -1,4 +1,5 @@
 import React from 'react';
+import { MotorPulseInterval } from "../BiscuitMachine";
 
 export interface MotorProps {
     isOn: boolean,
@@ -19,7 +20,7 @@ class Motor extends React.Component<MotorProps, object>  {
         
         if (this.props.isOn) {
             this.pulse();
-            this.timerId = setInterval(this.pulse.bind(this), 5000);
+            this.timerId = setInterval(this.pulse.bind(this), MotorPulseInterval * 1000);
         } else {
             clearInterval(this.timerId);
         }
