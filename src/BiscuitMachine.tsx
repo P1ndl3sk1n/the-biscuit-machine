@@ -28,7 +28,6 @@ const ConveyorLength: number = 6;
 const BakingAreaStartIndex: number = 3;
 const BakingAreaEndIndex: number = 4;
 
-
 export default class BiscuitMachine extends React.Component<object, BiscuitMachineState> {
     constructor(props: object) {
         super(props);
@@ -59,14 +58,14 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
         this.updateMotor(temperature);
     }
 
-    private onPulse = () => {
+    private pulse = () => {
         if (!this.isConveyorEmpty()) {
-            this.moveConveyor();
+            this.updateConveyor();
         }
-        this.pulse();
+        this.motorPulsed();
     }
 
-    private pulse = () => {
+    private motorPulsed = () => {
         this.setState({
             pulse: 1
         });
@@ -128,7 +127,7 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
     }
 
     private updateMotor = (temperature: number): void => {
-        let isMotorOn: boolean = false;
+        let isMotorOn: boolean = false; // switch is SwitchPosition.Paused
 
         switch (this.state.switchPosition) {
             case SwitchPosition.On: 
@@ -147,11 +146,14 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
     private isConveyorEmpty = (): boolean => {
         const conveyor = this.state.conveyor;
         let isEmpty = true;
-        isEmpty = !conveyor.some((biscuit, index) => { return biscuit !== BiscuitState.None; });
+        isEmpty = !conveyor.some((biscuit, index) => { 
+            return biscuit !== BiscuitState.None; 
+        });
+        
         return isEmpty;
     }
 
-    private moveConveyor = () => {
+    private updateConveyor = () => {
         let { bakedBiscuits, conveyor } = this.state;
 
         if (conveyor[conveyor.length - 1] === BiscuitState.Baked) {
@@ -218,7 +220,7 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
                         </tr>
                         <tr>
                             <td>
-                                <Motor isOn={this.state.isMotorOn} pulse={this.onPulse} />
+                                <Motor isOn={this.state.isMotorOn} onPulse={this.pulse} />
                             </td>
                             <td></td>
                             <td></td>

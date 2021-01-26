@@ -34,5 +34,6 @@ td {
 
 .conveyor-cell {
   width: 80px;
+  height: 21px;
   border-style: groove;
 }

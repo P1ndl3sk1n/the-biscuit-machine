@@ -42,12 +42,12 @@ class Oven extends React.Component<OvenProps, OvenState> {
             temperature = 0;
         }
 
+        this.props.onGetTemperature(temperature);
+
         this.setState({
             temperature: temperature,
             ovenClass: this.getOvenClass(temperature)
         });
-
-        this.props.onGetTemperature(temperature);
     }
 
     private getOvenClass = (temp: number) => {

@@ -2,7 +2,7 @@ import React from 'react';
 
 export interface MotorProps {
     isOn: boolean,
-    pulse: () => void
+    onPulse: () => void
 }
 
 class Motor extends React.Component<MotorProps, object>  {
@@ -30,7 +30,7 @@ class Motor extends React.Component<MotorProps, object>  {
     }
 
     private pulse = () => {
-        this.props.pulse();
+        this.props.onPulse();
     }
 
     render() {
