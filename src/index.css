@@ -36,7 +36,7 @@ td {
 
 .conveyor-cell {
   width: 80px;
-  height: 21px;
+  height: 60px;
   border-style: groove;
 }
 
@@ -47,13 +47,21 @@ td {
   border-radius: 3px 3px 3px 3px;
 }
 
+.paused,
 .warning-msg {
   color: #9F6000;
   background-color: #FEEFB3;
 }
+
+.off,
 .error-msg {
   color: #D8000C;
   background-color: #FFBABA;
+}
+
+.on {
+  color: #270;
+  background-color: #DFF2BF;
 }
 
 .fa {

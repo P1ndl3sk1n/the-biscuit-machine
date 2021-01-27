@@ -33,11 +33,10 @@ class Switch extends React.Component<SwitchProps, SwitchState>  {
     render() {
         return (
             <div>
-                <div>SWITCH</div>
-                <button onClick={() => this.setSwitchPosition(SwitchPosition.Paused)}>{SwitchPosition.Paused}</button>
+                <button className="paused" onClick={() => this.setSwitchPosition(SwitchPosition.Paused)}>{SwitchPosition.Paused}</button>
                 <div>
-                    <button onClick={() => this.setSwitchPosition(SwitchPosition.On)}>{SwitchPosition.On}</button>
-                    <button onClick={() => this.setSwitchPosition(SwitchPosition.Off)}>{SwitchPosition.Off}</button>
+                    <button className="on" onClick={() => this.setSwitchPosition(SwitchPosition.On)}>{SwitchPosition.On}</button>
+                    <button className="off" onClick={() => this.setSwitchPosition(SwitchPosition.Off)}>{SwitchPosition.Off}</button>
                 </div>
                 <div>
                     Position: {this.state.position}

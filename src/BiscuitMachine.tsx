@@ -4,6 +4,11 @@ import Motor from "./machine-elements/Motor";
 import Oven from "./machine-elements/Oven";
 import Stamper from "./machine-elements/Stamper";
 import Switch, { SwitchPosition } from "./machine-elements/Switch";
+import biscuit from "./images/biscuit.png";
+import extruded from "./images/extruded.png"
+import stamped from "./images/stamped.png"
+import baked from "./images/baked.png"
+import burntOut from "./images/burntOut.jpeg";
 
 export enum BiscuitState {
     None = 0,
@@ -256,6 +261,32 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
         });
     }
 
+    renderBiscuit = (biscuitState: BiscuitState) => {
+        let state: string;
+        switch (biscuitState) 
+        {
+            case BiscuitState.Extruded:
+                state = extruded;
+                break;
+            case BiscuitState.Stamped:
+                state = stamped;
+                break;
+            case BiscuitState.Baking:
+                state = biscuit;
+                break;
+            case BiscuitState.Baked:
+                state = baked;
+                break;
+            case BiscuitState.BurnOut:
+                state = burntOut;
+                break;
+            default:
+                return '';
+        }
+
+        return (<img src={state} alt="biscuit" width={60} />);
+    }
+
     render() {
         return (
             <div>
@@ -263,7 +294,7 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
                     <thead>
                         <tr>
                             <th colSpan={7}>
-                                BISCUIT MACHINE
+                                THE BISCUIT MACHINE
                             </th>
                         </tr>
                     </thead>
@@ -287,7 +318,7 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
                                 const state: string = biscuitState === BiscuitState.None ? '' : BiscuitState[biscuitState];
                                 return (
                                     <td key={i} className="conveyor-cell">
-                                        {state}
+                                        {this.renderBiscuit(biscuitState)}
                                     </td>
                                 )
                             })}
