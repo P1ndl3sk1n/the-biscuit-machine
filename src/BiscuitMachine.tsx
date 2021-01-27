@@ -14,7 +14,7 @@ enum BiscuitState {
     BurnOut = 5
 }
 
-interface BiscuitMachineState {
+export interface BiscuitMachineState {
     switchPosition: SwitchPosition,
     isMotorOn: boolean,
     isHeatingElementOn: boolean,
@@ -206,7 +206,7 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
         return false;
     }
 
-    private updateMessages = (switchPosition: SwitchPosition) => {
+    updateMessages = (switchPosition: SwitchPosition) => {
         let displayBurningBiscuitsMessage: boolean = false;
         let displayBurnOutBiscuitsMessage: boolean = false;
 
