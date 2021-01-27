@@ -61,7 +61,7 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
         clearInterval(this.burnOutTimeout);
     }
 
-    private positionChanged = (switchPosition: SwitchPosition) => {
+    positionChanged = (switchPosition: SwitchPosition) => {
         this.setState({
             switchPosition
         });
@@ -69,30 +69,19 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
         this.updateMessages(switchPosition);
     }
 
-    private getTemperature = (temperature: number) => {
+    getTemperature = (temperature: number) => {
         this.updateOven(temperature);
         this.updateMotor(temperature);
     }
 
-    private pulse = () => {
+    pulse = () => {
         if (!this.isConveyorEmpty()) {
             this.updateConveyor();
         }
         this.motorPulsed();
     }
 
-    private motorPulsed = () => {
-        this.setState({
-            pulse: 1
-        });
-        setTimeout(() => {
-            this.setState({
-                pulse: 0
-            });
-        }, 1000);
-    }
-
-    private onExtruderPulsed = () => {
+    onExtruderPulsed = () => {
         if (this.state.switchPosition === SwitchPosition.Off) {
             return;
         }
@@ -108,7 +97,7 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
         });
     }
 
-    private onStamperPulsed = () => {
+    onStamperPulsed = () => {
         if (this.state.switchPosition === SwitchPosition.Off) {
             return;
         }
@@ -122,6 +111,17 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
         this.setState({
             conveyor
         });
+    }
+
+    private motorPulsed = () => {
+        this.setState({
+            pulse: 1
+        });
+        setTimeout(() => {
+            this.setState({
+                pulse: 0
+            });
+        }, 1000);
     }
 
     private updateOven = (temperature: number): void => {
