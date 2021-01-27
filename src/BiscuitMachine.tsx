@@ -5,7 +5,7 @@ import Oven from "./machine-elements/Oven";
 import Stamper from "./machine-elements/Stamper";
 import Switch, { SwitchPosition } from "./machine-elements/Switch";
 
-enum BiscuitState {
+export enum BiscuitState {
     None = 0,
     Extruded = 1,
     Stamped = 2,
@@ -113,7 +113,7 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
         });
     }
 
-    private motorPulsed = () => {
+    motorPulsed = () => {
         this.setState({
             pulse: 1
         });
@@ -124,7 +124,7 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
         }, 1000);
     }
 
-    private updateOven = (temperature: number): void => {
+    updateOven = (temperature: number): void => {
         let isHeatingElementOn: boolean = this.state.isHeatingElementOn;
 
         if (this.state.switchPosition !== SwitchPosition.Off) {
@@ -142,7 +142,7 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
         });
     }
 
-    private updateMotor = (temperature: number): void => {
+    updateMotor = (temperature: number): void => {
         let isMotorOn: boolean = false; // switch is SwitchPosition.Paused
 
         switch (this.state.switchPosition) {
@@ -159,7 +159,7 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
         });
     }
 
-    private isConveyorEmpty = (): boolean => {
+    isConveyorEmpty = (): boolean => {
         const conveyor = this.state.conveyor;
         let isEmpty = true;
         isEmpty = !conveyor.some((biscuit, index) => { 
@@ -169,7 +169,7 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
         return isEmpty;
     }
 
-    private updateConveyor = () => {
+    updateConveyor = () => {
         let { bakedBiscuits, conveyor } = this.state;
 
         if (conveyor[conveyor.length - 1] === BiscuitState.Baked) {
@@ -196,7 +196,7 @@ export default class BiscuitMachine extends React.Component<object, BiscuitMachi
         });
     }
 
-    private hasBakingBiscuits = () => {
+    hasBakingBiscuits = () => {
         for (let i = BakingAreaStartIndex; i <= BakingAreaEndIndex; i++) {
             if (this.state.conveyor[i] === BiscuitState.Baking) {
                 return true;
